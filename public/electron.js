@@ -1,6 +1,6 @@
-const electron = require("electron");
-const path = require("path");
-const isDev = require("electron-is-dev");
+const electron = require('electron');
+const path = require('path');
+const isDev = require('electron-is-dev');
 
 const app = electron.app;
 
@@ -13,32 +13,32 @@ function createWindow() {
     width: 1466,
     height: 868,
     alwaysOnTop: true,
-    titleBarStyle: "hidden",
+    titleBarStyle: 'hidden',
     icon: '../build/icon.icns',
     webPreferences: {
       nodeIntegration: true
     }
   });
 
-  mainWindow.loadURL(isDev ? "http://localhost:3000" : "https://fronza-transportes.now.sh");
+  mainWindow.loadURL(isDev ? 'http://localhost:3000' : 'fronza-transportes-construcoes.now.sh');
 
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
 
-  mainWindow.on("closed", () => (mainWindow = null));
+  mainWindow.on('closed', () => (mainWindow = null));
 }
 
-app.on("ready", createWindow);
+app.on('ready', createWindow);
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (mainWindow === null) {
     createWindow();
   }
