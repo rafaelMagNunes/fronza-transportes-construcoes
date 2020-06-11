@@ -20,7 +20,7 @@ function createWindow() {
     }
   });
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : 'fronza-transportes-construcoes.now.sh');
+  mainWindow.loadURL('https://fronza-transportes-construcoes.now.sh');
 
 
   if (isDev) {

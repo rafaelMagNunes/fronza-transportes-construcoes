@@ -55,7 +55,7 @@
     "react-eject": "react-scripts eject",
     "electron:start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
     "pack": "electron-builder --dir",
-    "dist": "yarn build && electron-builder -mw",
+    "dist": "yarn build && electron-builder -w",
     "postinstall": "install-app-deps",
     "release": "yarn react-build && electron-builder --publish=always"
   },
