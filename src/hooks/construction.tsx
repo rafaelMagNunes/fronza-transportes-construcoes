@@ -6,6 +6,9 @@ interface CostructionData {
   construction: string;
   address: string;
   startDate: string;
+  cep: string;
+  state: string;
+  city: string;
 }
 
 interface UpdateCostruction {
@@ -13,6 +16,9 @@ interface UpdateCostruction {
   construction: string;
   address: string;
   start_date: string;
+  cep: string;
+  state: string;
+  city: string;
 }
 
 interface Costruction {
@@ -20,6 +26,9 @@ interface Costruction {
   construction: string;
   address: string;
   start_date: Date;
+  cep: string;
+  state: string;
+  city: string;
 }
 
 interface ConstructionState {
@@ -33,12 +42,22 @@ interface ConstructionDataState {
 interface ConstructionContextData {
   id: string;
   construction: Costruction;
-  create({ construction, address, startDate }: CostructionData): Promise<void>;
+  create({
+    construction,
+    address,
+    startDate,
+    state,
+    cep,
+    city,
+  }: CostructionData): Promise<void>;
   update({
     id,
     construction,
     address,
     start_date,
+    state,
+    cep,
+    city,
   }: UpdateCostruction): Promise<void>;
   remove(id: string): Promise<string>;
   store(id: string): void;
@@ -88,20 +107,29 @@ export const ConstructionProvider: React.FC = ({ children }) => {
     setDataConstruction({ construction });
   }, []);
 
-  const create = useCallback(async ({ construction, address, startDate }) => {
-    await api.post('/constructions', {
-      construction,
-      address,
-      start_date: startDate,
-    });
-  }, []);
+  const create = useCallback(
+    async ({ construction, address, startDate, cep, state, city }) => {
+      await api.post('/constructions', {
+        construction,
+        address,
+        start_date: startDate,
+        cep,
+        state,
+        city,
+      });
+    },
+    [],
+  );
 
   const update = useCallback(
-    async ({ id, construction, address, start_date }) => {
+    async ({ id, construction, address, start_date, state, cep, city }) => {
       await api.put(`/constructions/${id}`, {
         construction,
         address,
         start_date,
+        state,
+        cep,
+        city,
       });
     },
     [],

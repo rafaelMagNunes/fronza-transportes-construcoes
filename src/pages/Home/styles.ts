@@ -25,10 +25,10 @@ export const Body = styled.div`
 export const Grid = styled.div`
   margin-top: 30px;
   display: grid;
-  width: 45%;
-  grid-template-columns: 1fr 1fr;
+  width: 100%;
+  grid-template-columns: 25% 25%;
   grid-column-gap: 10px;
-  grid-row-gap: 1em;
+  grid-row-gap: 0;
 `;
 
 export const Divider = styled.div`

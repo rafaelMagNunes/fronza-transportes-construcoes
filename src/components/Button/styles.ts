@@ -9,15 +9,16 @@ export const Container = styled.button<ContainerProps>`
     props.buttonType === 'addButton' &&
     css`
       position: absolute;
-      bottom: 14px;
+      top: 220px;
       padding: 10px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      right: 14px;
+      right: 140px;
       border: none;
       color: #665ffa;
+      background: #fff;
       box-shadow: 0 3px 6px rgba(192, 208, 230, 0.8);
     `}
 `;

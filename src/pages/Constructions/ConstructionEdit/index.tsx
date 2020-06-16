@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useState, useEffect } from 'react';
 import { IconBaseProps } from 'react-icons';
 import { FiHome, FiPlus, FiMapPin, FiCalendar } from 'react-icons/fi';
 import { Form } from '@unform/web';
@@ -16,6 +16,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
 import Breadcumb from '../../../components/Breadcumb';
+import Select from '../../../components/Select';
 
 interface BreadcumbIten {
   title: string;
@@ -28,13 +29,60 @@ interface ConstructionFormData {
   address: string;
   construction: string;
   start_date: string;
+  cep: string;
+  state: string;
+  city: string;
 }
+
+interface LocationData {
+  state?: string;
+  city?: string;
+}
+
+const optionsState = [
+  { id: 'AC', column: 'Acre' },
+  { id: 'AL', column: 'Alagoas' },
+  { id: 'AP', column: 'Amapá' },
+  { id: 'AM', column: 'Amazonas' },
+  { id: 'BA', column: 'Bahia' },
+  { id: 'CE', column: 'Ceará' },
+  { id: 'DF', column: 'Distrito Federal' },
+  { id: 'ES', column: 'Espírito Santo' },
+  { id: 'GO', column: 'Goiás' },
+  { id: 'MA', column: 'Maranhão' },
+  { id: 'MT', column: 'Mato Grosso' },
+  { id: 'MS', column: 'Mato Grosso do Sul' },
+  { id: 'MG', column: 'Minas Gerais' },
+  { id: 'PA', column: 'Pará' },
+  { id: 'PB', column: 'Paraíba' },
+  { id: 'PR', column: 'Paraná' },
+  { id: 'PE', column: 'Pernambuco' },
+  { id: 'PI', column: 'Piauí' },
+  { id: 'RJ', column: 'Rio de Janeiro' },
+  { id: 'RN', column: 'Rio Grande do Norte' },
+  { id: 'RS', column: 'Rio Grande do Sul' },
+  { id: 'RO', column: 'Rondônia' },
+  { id: 'RR', column: 'Roraima' },
+  { id: 'SC', column: 'Santa Catarina' },
+  { id: 'SP', column: 'São Paulo' },
+  { id: 'SE', column: 'Sergipe' },
+  { id: 'TO', column: 'Tocantins' },
+  { id: 'EX', column: 'Estrangeiro' },
+];
 
 const ConstructionEdit: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
+  const [locationData, setLocationData] = useState<LocationData>({
+    city: '',
+    state: 'AC',
+  });
 
   const { update, construction } = useConstruction();
   const { addToast } = useToast();
+
+  useEffect(() => {
+    setLocationData({ city: construction.city, state: construction.state });
+  }, [setLocationData, construction]);
 
   const breadcumbItens: BreadcumbIten[] = [
     {
@@ -51,6 +99,46 @@ const ConstructionEdit: React.FC = () => {
     },
   ];
 
+  const handleState = useCallback(
+    data => {
+      setLocationData({ state: data.target.value });
+    },
+    [setLocationData],
+  );
+
+  const handleCity = useCallback(
+    data => {
+      setLocationData({ city: data.target.value });
+    },
+    [setLocationData],
+  );
+
+  const handleFindCep = useCallback(
+    data => {
+      const cep: string = data.target.value;
+
+      try {
+        const url = `https://viacep.com.br/ws/${cep}/json/`.replace(
+          `${cep}`,
+          cep,
+        );
+        fetch(url).then(res => {
+          if (res.ok) {
+            res.json().then(json => {
+              const city: string = json.localidade;
+              const state: string = json.uf;
+
+              setLocationData({ state, city });
+            });
+          }
+        });
+      } catch (err) {
+        // console.log(err);
+      }
+    },
+    [setLocationData],
+  );
+
   const handleSubmit = useCallback(
     async (data: ConstructionFormData) => {
       try {
@@ -59,6 +147,9 @@ const ConstructionEdit: React.FC = () => {
           construction: data.construction,
           address: data.address,
           start_date: data.start_date,
+          cep: data.cep,
+          state: data.state,
+          city: data.city,
         });
 
         addToast({
@@ -101,6 +192,37 @@ const ConstructionEdit: React.FC = () => {
             icon={FiHome}
             placeholder="Obra"
           />
+          <aside>
+            <Input
+              width="30%"
+              padding="9px"
+              iconSize={17}
+              name="cep"
+              icon={FiMapPin}
+              onChange={handleFindCep}
+              placeholder="CEP"
+            />
+            <Select
+              width="30%"
+              data={optionsState}
+              padding="9px"
+              iconSize={17}
+              name="state"
+              icon={FiMapPin}
+              value={locationData.state}
+              onChange={handleState}
+            />
+            <Input
+              width="30%"
+              padding="9px"
+              iconSize={17}
+              name="city"
+              icon={FiMapPin}
+              placeholder="Cidade"
+              value={locationData.city}
+              onChange={handleCity}
+            />
+          </aside>
           <aside>
             <Input
               width="50%"

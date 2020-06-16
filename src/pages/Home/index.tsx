@@ -6,7 +6,7 @@ import H1 from '../../components/H1';
 import Header from '../../components/Header';
 import ConstructionsCard from '../../components/ConstructionsCard';
 
-import { Container, Grid, Body, Divider } from './styles';
+import { Container, Grid, Body } from './styles';
 
 interface Constructions {
   id: string;
@@ -48,14 +48,6 @@ const Home: React.FC = () => {
       </Header>
 
       <Body>
-        <Grid>
-          {constructions.map(construction => (
-            <ConstructionsCard construction={construction} />
-          ))}
-        </Grid>
-
-        <Divider />
-
         <Grid>
           {constructions.map(construction => (
             <ConstructionsCard construction={construction} />

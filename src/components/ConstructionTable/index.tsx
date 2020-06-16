@@ -18,6 +18,9 @@ interface Constructions {
   construction: string;
   start_date: string;
   address: string;
+  cep: string;
+  state: string;
+  city: string;
 }
 
 interface Construction {
@@ -25,12 +28,23 @@ interface Construction {
   construction: string;
   start_date: Date;
   address: string;
+  cep: string;
+  state: string;
+  city: string;
 }
 
 const columns = [
   {
     column: 'construction',
     title: 'Obra',
+  },
+  {
+    column: 'state',
+    title: 'Estado',
+  },
+  {
+    column: 'city',
+    title: 'Cidade',
   },
   {
     column: 'address',
@@ -97,6 +111,9 @@ const Table: React.FC = () => {
         construction: construction.construction,
         address: construction.address,
         start_date: new Date(construction.start_date),
+        state: construction.state,
+        cep: construction.cep,
+        city: construction.city,
       };
 
       storeConstruction(constructionObject);
@@ -166,6 +183,8 @@ const Table: React.FC = () => {
           {constructions.map(iten => (
             <tr>
               <td className="title">{iten.construction}</td>
+              <td className="title">{iten.state}</td>
+              <td className="title">{iten.city}</td>
               <td>{iten.address}</td>
               <td>{format(parseISO(iten.start_date), 'dd/MM/yyyy')}</td>
               <td>
