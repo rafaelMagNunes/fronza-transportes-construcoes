@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from 'react';
+import React, { useRef, useCallback, useState } from 'react';
 import { IconBaseProps } from 'react-icons';
 import * as Yup from 'yup';
 import {
@@ -8,6 +8,7 @@ import {
   FiMail,
   FiPhone,
   FiFile,
+  FiMapPin,
 } from 'react-icons/fi';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -25,6 +26,7 @@ import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 import Header from '../../../components/Header';
 import Breadcumb from '../../../components/Breadcumb';
+import Select from '../../../components/Select';
 
 interface BreadcumbIten {
   title: string;
@@ -38,11 +40,55 @@ interface DataSupplier {
   email: string;
   cnpj: string;
   phone: string;
+  cep: string;
+  state: string;
+  city: string;
+  address: string;
 }
+
+interface LocationData {
+  state?: string;
+  city?: string;
+}
+
+const optionsState = [
+  { id: 'AC', column: 'Acre' },
+  { id: 'AL', column: 'Alagoas' },
+  { id: 'AP', column: 'Amapá' },
+  { id: 'AM', column: 'Amazonas' },
+  { id: 'BA', column: 'Bahia' },
+  { id: 'CE', column: 'Ceará' },
+  { id: 'DF', column: 'Distrito Federal' },
+  { id: 'ES', column: 'Espírito Santo' },
+  { id: 'GO', column: 'Goiás' },
+  { id: 'MA', column: 'Maranhão' },
+  { id: 'MT', column: 'Mato Grosso' },
+  { id: 'MS', column: 'Mato Grosso do Sul' },
+  { id: 'MG', column: 'Minas Gerais' },
+  { id: 'PA', column: 'Pará' },
+  { id: 'PB', column: 'Paraíba' },
+  { id: 'PR', column: 'Paraná' },
+  { id: 'PE', column: 'Pernambuco' },
+  { id: 'PI', column: 'Piauí' },
+  { id: 'RJ', column: 'Rio de Janeiro' },
+  { id: 'RN', column: 'Rio Grande do Norte' },
+  { id: 'RS', column: 'Rio Grande do Sul' },
+  { id: 'RO', column: 'Rondônia' },
+  { id: 'RR', column: 'Roraima' },
+  { id: 'SC', column: 'Santa Catarina' },
+  { id: 'SP', column: 'São Paulo' },
+  { id: 'SE', column: 'Sergipe' },
+  { id: 'TO', column: 'Tocantins' },
+  { id: 'EX', column: 'Estrangeiro' },
+];
 
 const SupplierForm: React.FC = () => {
   const { create } = useSupplier();
   const { addToast } = useToast();
+  const [locationData, setLocationData] = useState<LocationData>({
+    city: '',
+    state: 'AC',
+  });
 
   const formRef = useRef<FormHandles>(null);
 
@@ -61,6 +107,46 @@ const SupplierForm: React.FC = () => {
     },
   ];
 
+  const handleState = useCallback(
+    data => {
+      setLocationData({ state: data.target.value });
+    },
+    [setLocationData],
+  );
+
+  const handleCity = useCallback(
+    data => {
+      setLocationData({ city: data.target.value });
+    },
+    [setLocationData],
+  );
+
+  const handleFindCep = useCallback(
+    data => {
+      const cep: string = data.target.value;
+
+      try {
+        const url = `https://viacep.com.br/ws/${cep}/json/`.replace(
+          `${cep}`,
+          cep,
+        );
+        fetch(url).then(res => {
+          if (res.ok) {
+            res.json().then(json => {
+              const city: string = json.localidade;
+              const state: string = json.uf;
+
+              setLocationData({ state, city });
+            });
+          }
+        });
+      } catch (err) {
+        // console.log(err);
+      }
+    },
+    [setLocationData],
+  );
+
   const handleSubmit = useCallback(
     async (data: DataSupplier) => {
       try {
@@ -68,22 +154,30 @@ const SupplierForm: React.FC = () => {
 
         const schema = Yup.object().shape({
           name: Yup.string().required('O campo fornecedor é obrigatório'),
-          email: Yup.string().required('O campo e-mail é obrigatório'),
-          cnpj: Yup.string().required('O campo cnpj é obrigatório'),
-          phone: Yup.string().required('O campo telefone é obrigatório'),
+          email: Yup.string(),
+          cnpj: Yup.string(),
+          phone: Yup.string(),
+          cep: Yup.string(),
+          state: Yup.string(),
+          city: Yup.string(),
+          address: Yup.string(),
         });
 
         await schema.validate(data, {
           abortEarly: false,
         });
 
-        const { name, email, phone, cnpj } = data;
+        const { name, email, phone, cnpj, cep, state, city, address } = data;
 
         await create({
           name,
           email,
           phone,
           cnpj,
+          cep,
+          state,
+          city,
+          address,
         });
 
         addToast({
@@ -140,7 +234,7 @@ const SupplierForm: React.FC = () => {
               iconSize={17}
               name="cnpj"
               icon={FiFile}
-              placeholder="CNPJ"
+              placeholder="CNPJ/CPF"
             />
             <Input
               width="50%"
@@ -151,13 +245,55 @@ const SupplierForm: React.FC = () => {
               placeholder="Telefone"
             />
           </aside>
-          <Input
-            padding="9px"
-            iconSize={17}
-            name="email"
-            icon={FiMail}
-            placeholder="E-mail"
-          />
+          <aside>
+            <Input
+              width="30%"
+              padding="9px"
+              iconSize={17}
+              name="cep"
+              icon={FiMapPin}
+              onChange={handleFindCep}
+              placeholder="CEP"
+            />
+            <Select
+              width="30%"
+              data={optionsState}
+              padding="9px"
+              iconSize={17}
+              name="state"
+              icon={FiMapPin}
+              value={locationData.state}
+              onChange={handleState}
+            />
+            <Input
+              width="30%"
+              padding="9px"
+              iconSize={17}
+              name="city"
+              icon={FiMapPin}
+              placeholder="Cidade"
+              value={locationData.city}
+              onChange={handleCity}
+            />
+          </aside>
+          <aside>
+            <Input
+              width="50%"
+              padding="9px"
+              iconSize={17}
+              name="email"
+              icon={FiMail}
+              placeholder="E-mail"
+            />
+            <Input
+              width="40%"
+              padding="9px"
+              iconSize={17}
+              name="address"
+              icon={FiMapPin}
+              placeholder="Endereço"
+            />
+          </aside>
           <Button type="submit">Salvar</Button>
         </Form>
       </Card>

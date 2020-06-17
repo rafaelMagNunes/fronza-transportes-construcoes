@@ -23,6 +23,10 @@ interface Supplier {
   name: string;
   phone: string;
   cnpj: string;
+  cep: string;
+  state: string;
+  city: string;
+  address: string;
   email: string;
 }
 
@@ -33,11 +37,23 @@ const columns = [
   },
   {
     column: 'cnpj',
-    title: 'CNPJ',
+    title: 'CNPJ/CPF',
   },
   {
     column: 'email',
     title: 'E-mail',
+  },
+  {
+    column: 'state',
+    title: 'Estado',
+  },
+  {
+    column: 'city',
+    title: 'Cidade',
+  },
+  {
+    column: 'address',
+    title: 'Endereço',
   },
   {
     column: 'phone',
@@ -131,6 +147,9 @@ const Table: React.FC = () => {
               <td className="title">{supplier.name}</td>
               <td>{CNPJ.format(supplier.cnpj)}</td>
               <td>{supplier.email}</td>
+              <td>{supplier.state}</td>
+              <td>{supplier.city}</td>
+              <td>{supplier.address}</td>
               <td>{supplier.phone}</td>
               <td>
                 <FiEdit

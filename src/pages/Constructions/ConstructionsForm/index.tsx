@@ -38,8 +38,8 @@ interface ConstructionFormData {
 }
 
 interface LocationData {
-  state: string;
-  city: string;
+  state?: string;
+  city?: string;
 }
 
 const optionsState = [
@@ -97,6 +97,20 @@ const ConstructionForm: React.FC = () => {
       isSamePath: true,
     },
   ];
+
+  const handleState = useCallback(
+    data => {
+      setLocationData({ state: data.target.value });
+    },
+    [setLocationData],
+  );
+
+  const handleCity = useCallback(
+    data => {
+      setLocationData({ city: data.target.value });
+    },
+    [setLocationData],
+  );
 
   const handleFindCep = useCallback(
     data => {
@@ -217,6 +231,7 @@ const ConstructionForm: React.FC = () => {
               name="state"
               icon={FiMapPin}
               value={locationData.state}
+              onChange={handleState}
             />
             <Input
               width="30%"
@@ -226,6 +241,7 @@ const ConstructionForm: React.FC = () => {
               icon={FiMapPin}
               placeholder="Cidade"
               value={locationData.city}
+              onChange={handleCity}
             />
           </aside>
           <aside>

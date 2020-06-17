@@ -13,6 +13,9 @@ interface Constructions {
   construction: string;
   start_date: string;
   address: string;
+  city: string;
+  state: string;
+  cep: string;
 }
 
 const Home: React.FC = () => {
@@ -23,7 +26,7 @@ const Home: React.FC = () => {
       const response = await api.get<Constructions[]>('/constructions', {
         params: {
           page: 1,
-          limit: 6,
+          limit: 10,
           details: false,
         },
       });

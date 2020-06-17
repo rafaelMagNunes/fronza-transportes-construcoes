@@ -120,12 +120,7 @@ const SideBar: React.FC<SideBarProps> = ({ pathname }) => {
           </Content>
           <Content onClick={signOut}>
             <a>
-              <Icon
-                left="150%"
-                widthProp="120px"
-                alignProp="left"
-                title="Itens"
-              >
+              <Icon left="150%" widthProp="120px" alignProp="left" title="Sair">
                 <FiLogOut size={30} color="#9aaabe" />
               </Icon>
             </a>

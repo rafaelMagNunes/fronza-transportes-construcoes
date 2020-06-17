@@ -7,6 +7,10 @@ interface SupplierData {
   cnpj: string;
   phone: string;
   email: string;
+  cep: string;
+  state: string;
+  city: string;
+  address: string;
 }
 
 interface UpdateSupplier {
@@ -15,6 +19,10 @@ interface UpdateSupplier {
   cnpj: string;
   phone: string;
   email: string;
+  cep: string;
+  state: string;
+  city: string;
+  address: string;
 }
 
 interface Supplier {
@@ -23,6 +31,10 @@ interface Supplier {
   cnpj: string;
   phone: string;
   email: string;
+  cep: string;
+  state: string;
+  city: string;
+  address: string;
 }
 
 interface SupplierState {
@@ -36,8 +48,27 @@ interface SupplierDataState {
 interface SupplierContextData {
   id: string;
   supplier: Supplier;
-  create({ name, email, cnpj, phone }: SupplierData): Promise<void>;
-  update({ id, name, email, cnpj, phone }: UpdateSupplier): Promise<void>;
+  create({
+    name,
+    email,
+    cnpj,
+    phone,
+    cep,
+    state,
+    city,
+    address,
+  }: SupplierData): Promise<void>;
+  update({
+    id,
+    name,
+    email,
+    cnpj,
+    phone,
+    cep,
+    state,
+    city,
+    address,
+  }: UpdateSupplier): Promise<void>;
   remove(id: string): Promise<string>;
   store(id: string): void;
   storeSupplier(supplier: Supplier): void;
@@ -82,23 +113,37 @@ export const SupplierProvider: React.FC = ({ children }) => {
     setDataSupplier({ supplier });
   }, []);
 
-  const create = useCallback(async ({ name, phone, email, cnpj }) => {
-    await api.post('/suppliers', {
-      name,
-      phone,
-      email,
-      cnpj,
-    });
-  }, []);
+  const create = useCallback(
+    async ({ name, phone, email, cnpj, cep, state, city, address }) => {
+      await api.post('/suppliers', {
+        name,
+        phone,
+        email,
+        cnpj,
+        cep,
+        state,
+        city,
+        address,
+      });
+    },
+    [],
+  );
 
-  const update = useCallback(async ({ id, name, phone, email, cnpj }) => {
-    await api.put(`/suppliers/${id}`, {
-      name,
-      phone,
-      email,
-      cnpj,
-    });
-  }, []);
+  const update = useCallback(
+    async ({ id, name, phone, email, cnpj, cep, state, city, address }) => {
+      await api.put(`/suppliers/${id}`, {
+        name,
+        phone,
+        email,
+        cnpj,
+        cep,
+        state,
+        city,
+        address,
+      });
+    },
+    [],
+  );
 
   const remove = useCallback(async id => {
     const response = await api.delete(`/constructions/${id}`);

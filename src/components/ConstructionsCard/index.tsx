@@ -12,14 +12,20 @@ interface Construction {
   id: string;
   construction: string;
   start_date: string;
+  city: string;
+  state: string;
   address: string;
+  cep: string;
 }
 
 interface ConstructionData {
   id: string;
   construction: string;
   start_date: Date;
+  city: string;
+  state: string;
   address: string;
+  cep: string;
 }
 
 interface ConstructionCardProps {
@@ -41,6 +47,14 @@ const ConstructionsCard: React.FC<ConstructionCardProps> = ({
       <FiHome size={25} color="#3743fa" />
       <h1>{construction.construction}</h1>
       <p className="address">{construction.address}</p>
+      <aside>
+        <p className="column">Estado:</p>
+        <p>{construction.state}</p>
+      </aside>
+      <aside>
+        <p className="column">Cidade:</p>
+        <p>{construction.city}</p>
+      </aside>
       <aside>
         <p className="column">Data de Início:</p>
         <p>{format(parseISO(construction.start_date), 'dd/MM/yyyy')}</p>

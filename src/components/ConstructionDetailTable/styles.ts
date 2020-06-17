@@ -1,4 +1,5 @@
 import styled, { css, keyframes } from 'styled-components';
+import { Dialog as DialogConponent } from '@material-ui/core';
 
 interface ContainerProps {
   hasAnimation?: boolean;
@@ -59,8 +60,17 @@ export const Container = styled.div<ContainerProps>`
       font-weight: normal;
       color: #969cb3;
 
+      p {
+        cursor: pointer;
+      }
+
       &.title {
         color: #363f5f;
+      }
+
+      &.supplier {
+        font-weight: 500;
+        color: #666ffa;
       }
 
       svg {
@@ -98,6 +108,29 @@ export const Container = styled.div<ContainerProps>`
 
     th:last-child {
       border-radius: 0 4px 4px 0;
+    }
+  }
+`;
+
+export const Dialog = styled(DialogConponent)`
+  div {
+    div {
+      div {
+        width: 100%;
+        display: flex;
+        align-content: center;
+        justify-content: flex-start;
+        flex-direction: row;
+
+        h4 {
+          color: #666ffa;
+          font-weight: 400;
+        }
+
+        p {
+          margin-left: 12px;
+        }
+      }
     }
   }
 `;

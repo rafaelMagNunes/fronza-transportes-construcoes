@@ -26,9 +26,9 @@ export const Grid = styled.div`
   margin-top: 30px;
   display: grid;
   width: 100%;
-  grid-template-columns: 25% 25%;
+  grid-template-columns: 21% 21% 21% 21% 21%;
   grid-column-gap: 10px;
-  grid-row-gap: 0;
+  grid-row-gap: 25px;
 `;
 
 export const Divider = styled.div`

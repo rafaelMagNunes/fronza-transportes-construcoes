@@ -6,15 +6,6 @@ export const Container = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-
-    button {
-      margin-top: 20px;
-      padding: 9px;
-      color: #666ffa;
-      background: #fff !important;
-      border-radius: 4px;
-      border: none;
-    }
+    justify-content: space-between;
   }
 `;
