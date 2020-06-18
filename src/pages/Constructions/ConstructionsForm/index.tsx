@@ -201,7 +201,7 @@ const ConstructionForm: React.FC = () => {
         </H1>
         <Breadcumb breadcumbItens={breadcumbItens} />
       </Header>
-      <Card animationDirection="left" hasAnimation height="40vh">
+      <Card animationDirection="left" hasAnimation height="50vh">
         <H1 color="rgba(0, 0, 200, 0.30)" fontSize="35px">
           Formulário Obra
         </H1>
