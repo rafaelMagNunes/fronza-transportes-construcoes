@@ -7,6 +7,7 @@ import api from '../../services/api';
 import history from '../../services/history';
 
 import { useSupplier } from '../../hooks/supplier';
+import { useToast } from '../../hooks/toast';
 
 import Pagination from '../Pagination';
 
@@ -73,6 +74,7 @@ const Table: React.FC = () => {
   const [supplierId, setSupplierId] = useState<string>('');
 
   const { storeSupplier, remove } = useSupplier();
+  const { addToast } = useToast();
 
   useEffect(() => {
     async function loadSuppliers(): Promise<void> {
@@ -135,8 +137,14 @@ const Table: React.FC = () => {
   );
 
   const handleConfirmDelete = useCallback(async () => {
-    await remove(supplierId);
-  }, [remove, supplierId]);
+    try {
+      await remove(supplierId);
+
+      addToast({ title: 'Fornecedor deletado com succeso', type: 'success' });
+    } catch (err) {
+      // console.log(err);
+    }
+  }, [remove, supplierId, addToast]);
 
   return (
     <Container hasAnimation>
