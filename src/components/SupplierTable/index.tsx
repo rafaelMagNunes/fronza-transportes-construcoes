@@ -174,7 +174,7 @@ const Table: React.FC = () => {
                   />
                 ) : (
                   <FiTrash2
-                    onClick={handleDelete}
+                    onClick={() => handleDelete(supplier.id)}
                     className="remove"
                     size={25}
                   />
