@@ -146,7 +146,7 @@ export const SupplierProvider: React.FC = ({ children }) => {
   );
 
   const remove = useCallback(async id => {
-    const response = await api.delete(`/constructions/${id}`);
+    const response = await api.delete(`/suppliers/${id}`);
 
     return response.data;
   }, []);

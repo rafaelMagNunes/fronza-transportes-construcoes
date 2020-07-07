@@ -70,8 +70,9 @@ const Table: React.FC = () => {
   const [supplierList, setSupplierList] = useState<Supplier[]>([]);
   const [page, setPage] = useState<number>(1);
   const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [supplierId, setSupplierId] = useState<string>('');
 
-  const { storeSupplier } = useSupplier();
+  const { storeSupplier, remove } = useSupplier();
 
   useEffect(() => {
     async function loadSuppliers(): Promise<void> {
@@ -106,9 +107,13 @@ const Table: React.FC = () => {
     }
   }
 
-  const handleDelete = useCallback(() => {
-    setIsChecked(true);
-  }, [setIsChecked]);
+  const handleDelete = useCallback(
+    id => {
+      setIsChecked(true);
+      setSupplierId(id);
+    },
+    [setIsChecked, setSupplierId],
+  );
 
   const handleSearch = useCallback(
     async event => {
@@ -128,6 +133,10 @@ const Table: React.FC = () => {
     },
     [setSuppliers, setSupplierList, supplierList, suppliers],
   );
+
+  const handleConfirmDelete = useCallback(async () => {
+    await remove(supplierId);
+  }, [remove, supplierId]);
 
   return (
     <Container hasAnimation>
@@ -157,8 +166,12 @@ const Table: React.FC = () => {
                   className="edit"
                   size={25}
                 />
-                {isChecked ? (
-                  <FiCheckCircle className="remove" size={25} />
+                {isChecked && supplierId === supplier.id ? (
+                  <FiCheckCircle
+                    onClick={handleConfirmDelete}
+                    className="remove"
+                    size={25}
+                  />
                 ) : (
                   <FiTrash2
                     onClick={handleDelete}
