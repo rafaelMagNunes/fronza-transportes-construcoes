@@ -142,7 +142,7 @@ const Table: React.FC = () => {
 
       addToast({ title: 'Fornecedor deletado com succeso', type: 'success' });
     } catch (err) {
-      // console.log(err);
+      addToast({ title: 'Erro ao deletar fornecedor', type: 'error' });
     }
   }, [remove, supplierId, addToast]);
 
