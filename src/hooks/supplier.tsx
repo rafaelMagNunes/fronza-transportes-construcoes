@@ -4,7 +4,7 @@ import api from '../services/api';
 
 interface SupplierData {
   name: string;
-  cnpj: string;
+  cnpj?: string;
   phone: string;
   email: string;
   cep: string;

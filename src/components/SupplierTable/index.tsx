@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { cnpj as CNPJ, cpf as CPF, cnpj } from 'cpf-cnpj-validator';
+import { cnpj as CNPJ, cpf as CPF } from 'cpf-cnpj-validator';
 import { FiEdit, FiTrash2, FiCheckCircle } from 'react-icons/fi';
 
 import api from '../../services/api';
