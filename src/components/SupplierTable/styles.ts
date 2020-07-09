@@ -47,17 +47,19 @@ export const Container = styled.div<ContainerProps>`
       font-weight: 600;
       padding: 10px 32px;
       text-align: left;
-      font-size: 16px;
+      font-size: 14px;
       line-height: 24px;
+      max-width: 200px;
     }
 
     td {
       padding: 12px 32px;
       border: 0;
       background: #fff;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: normal;
       color: #969cb3;
+      max-width: 200px;
 
       &.title {
         color: #363f5f;

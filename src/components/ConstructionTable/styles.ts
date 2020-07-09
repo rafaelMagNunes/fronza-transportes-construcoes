@@ -49,9 +49,11 @@ export const Container = styled.div<ContainerProps>`
       text-align: left;
       font-size: 16px;
       line-height: 24px;
+      max-width: 200px;
     }
 
     td {
+      max-width: 200px;
       padding: 12px 32px;
       border: 0;
       background: #fff;

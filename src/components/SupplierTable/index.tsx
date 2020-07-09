@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { cnpj as CNPJ } from 'cpf-cnpj-validator';
+import { cnpj as CNPJ, cpf as CPF, cnpj } from 'cpf-cnpj-validator';
 import { FiEdit, FiTrash2, FiCheckCircle } from 'react-icons/fi';
 
 import api from '../../services/api';
@@ -45,16 +45,8 @@ const columns = [
     title: 'E-mail',
   },
   {
-    column: 'state',
-    title: 'Estado',
-  },
-  {
     column: 'city',
     title: 'Cidade',
-  },
-  {
-    column: 'address',
-    title: 'Endereço',
   },
   {
     column: 'phone',
@@ -162,11 +154,13 @@ const Table: React.FC = () => {
           {suppliers.map(supplier => (
             <tr>
               <td className="title">{supplier.name}</td>
-              <td>{CNPJ.format(supplier.cnpj)}</td>
+              <td>
+                {CNPJ.isValid(supplier.cnpj, false)
+                  ? CNPJ.format(supplier.cnpj)
+                  : CPF.format(supplier.cnpj)}
+              </td>
               <td>{supplier.email}</td>
-              <td>{supplier.state}</td>
               <td>{supplier.city}</td>
-              <td>{supplier.address}</td>
               <td>{supplier.phone}</td>
               <td>
                 <FiEdit

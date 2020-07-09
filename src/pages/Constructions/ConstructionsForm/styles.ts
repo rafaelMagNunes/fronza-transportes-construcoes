@@ -5,7 +5,8 @@ export const Container = styled.div`
   form {
     margin-top: 10px;
     position: relative;
-    height: 25vh;
+    height: 40vh;
+    width: 70vw;
     display: flex;
     flex-direction: column;
     align-items: center;

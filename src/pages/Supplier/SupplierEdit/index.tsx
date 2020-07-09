@@ -197,7 +197,7 @@ const SupplierForm: React.FC = () => {
         </H1>
         <Breadcumb breadcumbItens={breadcumbItens} />
       </Header>
-      <Card animationDirection="left" hasAnimation height="45vh">
+      <Card animationDirection="left" hasAnimation height="60vh" width="72vh">
         <H1 color="rgba(0, 0, 200, 0.30)" fontSize="35px">
           Formulário Fornecedor
         </H1>

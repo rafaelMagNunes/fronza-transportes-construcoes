@@ -39,10 +39,6 @@ const columns = [
     title: 'Obra',
   },
   {
-    column: 'state',
-    title: 'Estado',
-  },
-  {
     column: 'city',
     title: 'Cidade',
   },
@@ -183,8 +179,7 @@ const Table: React.FC = () => {
           {constructions.map(iten => (
             <tr>
               <td className="title">{iten.construction}</td>
-              <td className="title">{iten.state}</td>
-              <td className="title">{iten.city}</td>
+              <td>{iten.city}</td>
               <td>{iten.address}</td>
               <td>{format(parseISO(iten.start_date), 'dd/MM/yyyy')}</td>
               <td>
