@@ -132,11 +132,17 @@ const Table: React.FC = () => {
     try {
       await remove(supplierId);
 
+      const newSuppliers = suppliers.filter(
+        supplier => supplierId !== supplier.id,
+      );
+
+      setSuppliers(newSuppliers);
+
       addToast({ title: 'Fornecedor deletado com succeso', type: 'success' });
     } catch (err) {
       addToast({ title: 'Erro ao deletar fornecedor', type: 'error' });
     }
-  }, [remove, supplierId, addToast]);
+  }, [remove, supplierId, addToast, setSuppliers, suppliers]);
 
   return (
     <Container hasAnimation>

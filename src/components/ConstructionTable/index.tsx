@@ -122,6 +122,12 @@ const Table: React.FC = () => {
     try {
       await remove(id);
 
+      const newConstructions = constructions.filter(
+        construction => id !== construction.id,
+      );
+
+      setConstructions(newConstructions);
+
       addToast({
         type: 'success',
         title: 'Obra deletada com sucesso',
@@ -134,7 +140,7 @@ const Table: React.FC = () => {
         title: 'Erro ao deletar obra',
       });
     }
-  }, [addToast, remove, id]);
+  }, [addToast, remove, id, constructions, setConstructions]);
 
   const handleDeleteConstruction = useCallback(
     id => {
