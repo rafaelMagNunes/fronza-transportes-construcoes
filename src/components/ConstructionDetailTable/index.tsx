@@ -53,6 +53,7 @@ interface Constructions {
 interface TableProps {
   time: string;
   data: Iten[] | undefined;
+  constructions: Constructions | undefined;
 }
 
 const columns = [
@@ -79,9 +80,11 @@ const columns = [
   },
 ];
 
-const ConstructionDetailTable: React.FC<TableProps> = ({ data, time }) => {
-  const [constructions, setConstructions] = useState<Constructions>();
-  const [itens, setItens] = useState<Iten[] | undefined>([]);
+const ConstructionDetailTable: React.FC<TableProps> = ({
+  data: itens,
+  time,
+  constructions,
+}) => {
   const [supplier, setSupplier] = useState<Supplier>();
   const [itenId, setItenId] = useState<string>('');
   const [isChecked, setIsChecked] = useState<boolean>(false);
@@ -90,25 +93,6 @@ const ConstructionDetailTable: React.FC<TableProps> = ({ data, time }) => {
   const { id } = useConstruction();
   const { remove } = useIten();
   const { addToast } = useToast();
-
-  useEffect(() => {
-    async function loadConstructions(): Promise<void> {
-      const response = await api.get<Constructions>(
-        `/constructions/byid/${id}`,
-        {
-          params: {
-            details: 'true',
-          },
-        },
-      );
-
-      setConstructions(response.data);
-    }
-
-    setItens(data);
-
-    loadConstructions();
-  }, [setConstructions, id, data, setItens]);
 
   const handleClose = useCallback(
     suppliers => {

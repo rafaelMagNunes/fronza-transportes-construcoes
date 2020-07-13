@@ -1,4 +1,10 @@
-import React, { useRef, useState, useCallback } from 'react';
+import React, {
+  useRef,
+  useState,
+  useCallback,
+  useMemo,
+  useEffect,
+} from 'react';
 import { Link } from 'react-router-dom';
 import { Form } from '@unform/web';
 import { FormHandles } from '@unform/core';
@@ -6,6 +12,8 @@ import { IconBaseProps } from 'react-icons';
 import { FiHome, FiPlus, FiSearch, FiCalendar } from 'react-icons/fi';
 
 import { useConstruction } from '../../hooks/construction';
+
+import formatValue from '../../utils/formatValue';
 
 import H1 from '../../components/H1';
 import Input from '../../components/Input';
@@ -15,7 +23,7 @@ import Breadcumb from '../../components/Breadcumb';
 import Table from '../../components/ConstructionDetailTable';
 import Select from '../../components/Select';
 
-import { Container } from './styles';
+import { Container, Value } from './styles';
 import api from '../../services/api';
 
 interface BreadcumbIten {
@@ -34,6 +42,13 @@ interface Supplier {
   city: string;
   address: string;
   email: string;
+}
+
+interface Constructions {
+  construction: string;
+  start_date: string;
+  address: string;
+  iten: Iten[];
 }
 
 interface Iten {
@@ -78,8 +93,26 @@ const ConstructionDetails: React.FC = () => {
   const formRef = useRef<FormHandles>(null);
   const [data, setData] = useState<Iten[] | undefined>();
   const [time, setTime] = useState<string>('all');
+  const [constructions, setConstructions] = useState<Constructions>();
 
-  const { construction } = useConstruction();
+  const { id } = useConstruction();
+
+  useEffect(() => {
+    async function loadConstructions(): Promise<void> {
+      const response = await api.get<Constructions>(
+        `/constructions/byid/${id}`,
+        {
+          params: {
+            details: 'true',
+          },
+        },
+      );
+
+      setConstructions(response.data);
+    }
+
+    loadConstructions();
+  }, [setConstructions, id, data]);
 
   const breadcumbItens: BreadcumbIten[] = [
     {
@@ -96,7 +129,7 @@ const ConstructionDetails: React.FC = () => {
         `/itens/${data.target.value}`,
         {
           params: {
-            id: construction.id,
+            id,
           },
         },
       );
@@ -107,7 +140,7 @@ const ConstructionDetails: React.FC = () => {
         setData(response.data);
       }
     },
-    [setData, construction],
+    [setData, id],
   );
 
   const handleChangeTime = useCallback(
@@ -115,7 +148,7 @@ const ConstructionDetails: React.FC = () => {
       const time = data.target.value;
 
       const response = await api.get<Iten[] | undefined>(
-        `/itens/bytime/${construction.id}`,
+        `/itens/bytime/${id}`,
         {
           params: {
             time,
@@ -126,8 +159,22 @@ const ConstructionDetails: React.FC = () => {
       setData(response.data);
       setTime(time);
     },
-    [setData, construction, setTime],
+    [setData, id, setTime],
   );
+
+  function getValue(itens: Iten[] | undefined): string {
+    let total = 0;
+
+    if (itens) {
+      itens.forEach(iten => {
+        total += Number(iten.value);
+      });
+    }
+
+    return formatValue(total);
+  }
+
+  const value = useMemo(() => getValue(constructions?.iten), [constructions]);
 
   return (
     <Container>
@@ -138,7 +185,7 @@ const ConstructionDetails: React.FC = () => {
           color="rgba(0, 0, 200, 0.30)"
           fontSize="40px"
         >
-          Obras
+          Itens da Obra
         </H1>
         <Breadcumb breadcumbItens={breadcumbItens} />
       </Header>
@@ -160,8 +207,13 @@ const ConstructionDetails: React.FC = () => {
           width="40%"
         />
       </Form>
+      <Value>
+        <h6>Valor Total:</h6>
 
-      <Table data={data} time={time} />
+        <h6>{value}</h6>
+      </Value>
+
+      <Table data={data} time={time} constructions={constructions} />
 
       <Link to="/constructions/form">
         <Button buttonType="addButton">
