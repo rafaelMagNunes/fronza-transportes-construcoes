@@ -87,10 +87,11 @@ const Table: React.FC = () => {
       });
 
       setConstructions(response.data);
+      setConstructionList(response.data);
     }
 
     loadConstructions();
-  }, [setConstructions, page]);
+  }, [setConstructions, page, setConstructionList]);
 
   const handleSelectConstructionToSeeDetails = useCallback(
     id => {
@@ -152,21 +153,18 @@ const Table: React.FC = () => {
 
   const handleSearch = useCallback(
     async event => {
-      setConstructionList(constructions);
+      try {
+        const response = await api.get<Constructions[]>(
+          `constructions/search/${event.target.value}`,
+        );
 
-      const response = await api.get<Constructions[]>(
-        `constructions/search/${event.target.value}`,
-      );
-
-      const { data } = response;
-
-      if (data.length === 0) {
-        setConstructions(constructionList);
-      } else {
+        const { data } = response;
         setConstructions(data);
+      } catch (error) {
+        setConstructions(constructionList);
       }
     },
-    [setConstructions, setConstructionList, constructionList, constructions],
+    [setConstructions, constructionList],
   );
 
   return (

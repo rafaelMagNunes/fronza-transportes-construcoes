@@ -78,6 +78,7 @@ const Table: React.FC = () => {
       });
 
       setSuppliers(response.data);
+      setSupplierList(response.data);
     }
 
     loadSuppliers();
@@ -111,21 +112,19 @@ const Table: React.FC = () => {
 
   const handleSearch = useCallback(
     async event => {
-      setSupplierList(suppliers);
+      try {
+        const response = await api.get<Supplier[]>(
+          `suppliers/search/${event.target.value}`,
+        );
 
-      const response = await api.get<Supplier[]>(
-        `suppliers/search/${event.target.value}`,
-      );
+        const { data } = response;
 
-      const { data } = response;
-
-      if (data.length === 0) {
-        setSuppliers(supplierList);
-      } else {
         setSuppliers(data);
+      } catch (error) {
+        setSuppliers(supplierList);
       }
     },
-    [setSuppliers, setSupplierList, supplierList, suppliers],
+    [setSuppliers, supplierList],
   );
 
   const handleConfirmDelete = useCallback(async () => {

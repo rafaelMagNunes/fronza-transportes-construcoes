@@ -94,6 +94,7 @@ const ConstructionDetails: React.FC = () => {
   const [data, setData] = useState<Iten[] | undefined>();
   const [time, setTime] = useState<string>('all');
   const [constructions, setConstructions] = useState<Constructions>();
+  const [itensList, setItensList] = useState<Iten[] | undefined>();
 
   const { id } = useConstruction();
 
@@ -109,10 +110,11 @@ const ConstructionDetails: React.FC = () => {
       );
 
       setConstructions(response.data);
+      setItensList(response.data.iten);
     }
 
     loadConstructions();
-  }, [setConstructions, id, data]);
+  }, [setConstructions, id, data, setItensList]);
 
   const breadcumbItens: BreadcumbIten[] = [
     {
@@ -125,22 +127,22 @@ const ConstructionDetails: React.FC = () => {
 
   const handleSearch = useCallback(
     async data => {
-      const response = await api.get<Iten[] | undefined>(
-        `/itens/${data.target.value}`,
-        {
-          params: {
-            id,
+      try {
+        const response = await api.get<Iten[] | undefined>(
+          `/itens/${data.target.value}`,
+          {
+            params: {
+              id,
+            },
           },
-        },
-      );
-
-      if (response.data?.length === 0) {
-        setData([]);
-      } else {
+        );
+        setTime('no');
         setData(response.data);
+      } catch (error) {
+        setData(itensList);
       }
     },
-    [setData, id],
+    [setData, id, setTime, itensList],
   );
 
   const handleChangeTime = useCallback(
