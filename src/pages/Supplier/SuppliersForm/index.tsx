@@ -130,16 +130,18 @@ const SupplierForm: React.FC = () => {
           `${cep}`,
           cep,
         );
-        fetch(url).then(res => {
-          if (res.ok) {
-            res.json().then(json => {
-              const city: string = json.localidade;
-              const state: string = json.uf;
+        if (cep.length === 8) {
+          fetch(url).then(res => {
+            if (res.ok) {
+              res.json().then(json => {
+                const city: string = json.localidade;
+                const state: string = json.uf;
 
-              setLocationData({ state, city });
-            });
-          }
-        });
+                setLocationData({ state, city });
+              });
+            }
+          });
+        }
       } catch (err) {
         // console.log(err);
       }

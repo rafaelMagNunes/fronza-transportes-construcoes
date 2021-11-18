@@ -146,9 +146,13 @@ const ConstructionDetailTable: React.FC<TableProps> = ({
                 <td className="title">{iten.description}</td>
                 <td>{format(parseISO(iten.date), 'dd/MM/yyyy')}</td>
                 <td className="supplier">
-                  <p onClick={() => handleClose(iten.supplier)}>
-                    {iten.supplier.name}
-                  </p>
+                  {iten.supplier !== null ? (
+                    <p onClick={() => handleClose(iten.supplier)}>
+                      {iten.supplier.name}
+                    </p>
+                  ) : (
+                    <p>Sem Fornecedor</p>
+                  )}
                 </td>
                 <td>{formatValue(iten.value)}</td>
                 <td>
