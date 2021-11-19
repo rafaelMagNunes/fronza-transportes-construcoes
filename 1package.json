@@ -8,6 +8,21 @@
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
+  "build": {
+    "appId": "com.electron.fronzatransportes",
+    "productName": "Fronza Transportes",
+    "copyright": "Copyright © 2020 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets"
+    }
+  },
   "dependencies": {
     "@material-ui/core": "^4.10.2",
     "@testing-library/jest-dom": "^4.2.4",
@@ -36,7 +51,27 @@
     "react-start": "react-scripts start",
     "build": "react-scripts build",
     "react-test": "react-scripts test --env=jsdom",
-    "react-eject": "react-scripts eject"
+    "react-eject": "react-scripts eject",
+    "electron:start": "concurrently \"cross-env BROWSER=none yarn react-start\" \"wait-on http://localhost:3000 && electron .\"",
+    "pack": "electron-builder --dir",
+    "dist": "yarn build && electron-builder -w",
+    "postinstall": "install-app-deps",
+    "release": "yarn react-build && electron-builder --publish=always"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   },
   "devDependencies": {
     "@types/react-router-dom": "^5.1.5",
