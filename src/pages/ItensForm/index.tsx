@@ -127,7 +127,7 @@ const ItenForm: React.FC = () => {
       const response = await api.get<Supplier[]>('/suppliers', {
         params: {
           page,
-          limit: 50,
+          limit: 1500,
         },
       });
 
