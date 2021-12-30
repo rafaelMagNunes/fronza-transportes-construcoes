@@ -238,22 +238,24 @@ const ItenForm: React.FC = () => {
           <aside>
             <section>
               <Select
-                width="90%"
-                padding="9px"
-                iconSize={17}
-                name="supplier"
-                icon={FiUser}
-                data={suppliers}
-              />
-            </section>
-            <section>
-              <Select
                 width="100%"
                 padding="9px"
                 iconSize={17}
                 name="construction"
                 icon={FiHome}
                 data={constructions}
+              />
+            </section>
+          </aside>
+          <aside>
+            <section>
+              <Select
+                width="100%"
+                padding="9px"
+                iconSize={17}
+                name="supplier"
+                icon={FiUser}
+                data={suppliers}
               />
             </section>
           </aside>

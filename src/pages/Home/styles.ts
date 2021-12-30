@@ -26,8 +26,8 @@ export const Grid = styled.div`
   margin-top: 30px;
   display: grid;
   width: 100%;
-  grid-template-columns: 21% 21% 21% 21% 21%;
-  grid-column-gap: 10px;
+  grid-template-columns: 21% 21% 21% 21%;
+  grid-column-gap: 2%;
   grid-row-gap: 25px;
 `;
 
